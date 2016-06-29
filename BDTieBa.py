@@ -4,6 +4,7 @@ import os
 import re
 from send_email import send_email
 
+
 class BDTieBa:
 	def __init__(self, name, main_page, email_send_list):
 		self.fileName = '{0}.data'.format(name)
@@ -86,6 +87,8 @@ class BDTieBa:
 		Returns: a list of new contents, each content is consist of a title and an url
 		such as [(title1, url1), (title2, url2)]
 		"""
+		if not tops:
+			return None
 		old_paths = self.getAllChapters(self.fileName)
 		new_paths = []
 		new_contents = []
@@ -135,7 +138,11 @@ class BDTieBa:
 
 
 	def check_send_failed_contents(self):
-		"""send the failed contents again"""
+		"""send the failed contents again
+		Return: bool
+		if some send-failed-items are send sucessfully now, return True
+		else return False
+		"""
 		try:
 			with open(self.tmpFileName, 'r') as f:
 				send_failed_contents = f.readlines();
@@ -148,4 +155,5 @@ class BDTieBa:
 				if not send_result:
 					with open(self.tmpFileName, 'w') as f:
 						pass
-			return send_failed_contents == {}
+					return True
+			return False
