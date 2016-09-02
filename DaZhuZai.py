@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-import os
 import re
 
 from SinglePageSpider import SinglePageSpider
