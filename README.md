@@ -10,7 +10,7 @@
 
 
 # 开发环境
-python3 + ubuntu + Crontab
+python3 + ubuntu + Crontab（注意**只支持python3**）
 其中Crontab是ubuntu上的一个定时任务机制，用来设置定时指定这个脚本的。用法很简单，请自行搜索。
 
 
