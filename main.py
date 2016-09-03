@@ -7,6 +7,14 @@ from UpdateMonitorBaseClass import UpdateMonitorBaseClass
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
+	sdcs = UpdateMonitorBaseClass(email_send_list,
+		'学院官网',
+		'http://sdcs.sysu.edu.cn/',
+		'<a href="(http://sdcs.sysu.edu.cn/\?p=\d*)" title="([^"]*)"[^<]*</a>',
+		'条通知'
+		)
+	sdcs.checkUpdate()
+
 	# 太古神王-百度贴吧
 	taiGuShenWang = UpdateMonitorBaseClass(email_send_list,
 		'太古神王',
@@ -20,7 +28,8 @@ def main(args):
 	wyblog = UpdateMonitorBaseClass(email_send_list,
 		'王垠的博客',
 		'http://www.yinwang.org',
-		'<a href="(http://yinwang.org/blog-cn/[^"]*)">([^<]*)</a>'
+		'<a href="(http://yinwang.org/blog-cn/[^"]*)">([^<]*)</a>',
+		'篇博客'
 		)
 	wyblog.checkUpdate()
 

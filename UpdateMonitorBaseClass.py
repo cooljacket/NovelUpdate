@@ -9,7 +9,7 @@ from SendMailReliablly import SendMailReliablly
 
 
 class UpdateMonitorBaseClass:
-	def __init__(self, email_send_list, name, url, pattern, columns=['link_address']):
+	def __init__(self, email_send_list, name, url, pattern, tips='章', columns=['link_address']):
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
@@ -17,6 +17,7 @@ class UpdateMonitorBaseClass:
 		self.db.createTable(self.name, columns)
 		self.reliableEmailSender = SendMailReliablly(self.name + "_failed")
 		self.pattern = re.compile(pattern, re.I)
+		self.tips = tips
 
 
 	def getTargetContent(self):
@@ -49,7 +50,11 @@ class UpdateMonitorBaseClass:
 				self.db.insert([tie])
 
 		to_whom_list, title, content = self.generate_noticification(updateTies)
-		self.reliableEmailSender.send(to_whom_list, title, content)
+		send_result = self.reliableEmailSender.send(to_whom_list, title, content)
+		if send_result:
+			print('发送邮件成功')
+		else:
+			print('发送邮件失败，待重发')	
 		return len(updateTies) > 0
 
 
@@ -57,7 +62,7 @@ class UpdateMonitorBaseClass:
 	def generate_noticification(self, new_contents):
 		"""generate email to notify the users about the new contents"""
 		if new_contents is not None and len(new_contents) > 0:
-			mail_title = '{0}更新了{1}章'.format(self.name, len(new_contents))
+			mail_title = '{0}更新了{1}{2}'.format(self.name, len(new_contents), self.tips)
 			content = mail_title + "：\n"
 			for (url, title) in new_contents:
 				content += '{0}\n{1}\n\n'.format(title, url)
