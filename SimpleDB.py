@@ -3,6 +3,7 @@ import os
 
 
 class Singleton(type):
+	"""用来辅助SimpleDB实现单例模式的"""
 	def __init__(cls, name, bases, dict):
 		super(Singleton, cls).__init__(name, bases, dict)
 		cls._instance = None
@@ -14,6 +15,7 @@ class Singleton(type):
 
 
 class Cursor:
+	"""游标类，其实相当于数据库的迭代器"""
 	def __init__(self, tableName):
 		self.cursor = open(tableName)
 
@@ -25,6 +27,7 @@ class Cursor:
 
 
 class SimpleDB:
+	"""简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""
 	__metaclass__ = Singleton
 
 	def __init__(self):
@@ -34,7 +37,7 @@ class SimpleDB:
 
 	def createTable(self, tableName, columns):
 		self.tableName = tableName.replace('/', '_') + '.db_jacket'
-		# 如果数据库文件已经存在，则保留原有数据，不要覆盖
+		# 如果数据库文件不存在，则新建一个
 		if not os.path.exists(self.tableName):
 			self.size = len(columns)
 			self.columnToIndex = {}
@@ -45,6 +48,10 @@ class SimpleDB:
 
 
 	def insert(self, row, row_to_str=None):
+		"""插入一行
+		row: 一个列表，长度要和建表时指定的一样；
+		row_to_str：可选，可以自己指定把插入的行转成字符串的函数
+		"""
 		with open(self.tableName, 'a') as db:
 			if row_to_str is None or not callable(row_to_str):
 				row_to_str = self.row_to_str
@@ -53,6 +60,12 @@ class SimpleDB:
 
 	# 线性查找过去
 	def find(self, values):
+		"""在数据库中查找
+		values：只支持完全匹配，比如['name', 'age', '']表示查找名字刚好为'name'年轻刚好为'age'性别不限的人
+		注意空字符串表示'*'，即任意值都可以
+
+		返回值：True表示查找到了，False表示找不到
+		"""
 		cursorObj = Cursor(self.tableName)
 		cursor = cursorObj.getCursor()
 		result = False
@@ -83,6 +96,7 @@ class SimpleDB:
 
 
 	def delete_all(self):
+		"""删除所有的行"""
 		if os.path.exists(self.tableName):
 			os.remove(self.tableName)
 		with open(self.tableName, 'w') as f:
@@ -90,6 +104,7 @@ class SimpleDB:
 
 
 	def get_all(self):
+		"""获取表里所有的行"""
 		cursorObj = Cursor(self.tableName)
 		cursor = cursorObj.getCursor()
 		all = []

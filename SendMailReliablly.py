@@ -4,6 +4,7 @@ from SimpleDB import SimpleDB
 
 
 class SendMailReliablly:
+	"""可靠邮件发送器，发送失败会自动保存进数据库里，下次激活时自动重发"""
 	def __init__(self, tableName):
 		self.db = SimpleDB()
 		self.db.createTable(tableName, ['to_whom_list', 'title', 'content'])
@@ -11,6 +12,12 @@ class SendMailReliablly:
 
 
 	def send(self, to_whom_list, title, content):
+		"""发送邮件的主体逻辑：
+		1）待发送邮件=以前发送失败的+现在要发送的
+		2）逐封邮件发送（可能需要调整一个发送间隔，因为太快连续发送，会导致邮件服务器拒绝服务；
+		3）收集这一次发送失败的邮件；
+		4）清空原来的“发送失败”数据库，把新的数据保存进去。
+		"""
 		emails_to_send = self.db.get_all()
 		if to_whom_list:
 			emails_to_send.append(self.row2str([to_whom_list, title, content]))

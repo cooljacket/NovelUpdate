@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-import os
 import re
 
 from send_email import send_email
@@ -9,6 +8,7 @@ from SendMailReliablly import SendMailReliablly
 
 
 class UpdateMonitorBaseClass:
+	"""抽象监测更新并发送邮件的逻辑，成为一个类，只需要简单传入参数即可塑造一个业务！"""
 	def __init__(self, email_send_list, name, url, pattern, tips='章', columns=['link_address']):
 		self.email_send_list = email_send_list
 		self.name = name
@@ -21,7 +21,9 @@ class UpdateMonitorBaseClass:
 
 
 	def getTargetContent(self):
-		"""爬取贴吧的置顶帖子
+		"""获取指定页面的目标内容：
+		1）指定页面由SinglePageSpider获取；
+		2）目标内容由正则表达式匹配得到。
 
 		Returns: a list of update chapters' relative path and its title
 		such as [('http://dazhuzai.net.cn/dazhuzai-1309.html', 'title 1'), ]
@@ -35,6 +37,11 @@ class UpdateMonitorBaseClass:
 
 
 	def checkUpdate(self):
+		"""监测更新的主体逻辑：
+		1）获取当前的页面内容；
+		2）与数据库里保存的数据比对，找出更新的数据；
+		3）生成通知的邮件内容，扔给“可靠邮件发送器”发送
+		"""
 		print('Checking {0}...'.format(self.name))
 		currentTies = self.getTargetContent()
 		print('Got {0}...'.format(self.name))

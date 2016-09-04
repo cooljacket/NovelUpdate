@@ -21,5 +21,3 @@ class SinglePageSpider:
 		respData = resp.read()
 		return respData.decode('utf-8')
 
-
-	# def 
