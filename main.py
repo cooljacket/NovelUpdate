@@ -16,12 +16,22 @@ def main(args):
 	sdcs.checkUpdate()
 
 	# 太古神王-百度贴吧
-	taiGuShenWang = UpdateMonitorBaseClass(email_send_list,
-		'太古神王',
-		'http://tieba.baidu.com/f?kw=%CC%AB%B9%C5%C9%F1%CD%F5',
-		'<div class="threadlist_title[^>]*>\s*<i[^>]*></i>\s*<i[^>]*></i>\s*<a href="([^"]*)"[^>]*>\s*(.*?)\s*</a>\s*</div>'
+	# 已经不看了
+	# taiGuShenWang = UpdateMonitorBaseClass(email_send_list,
+	# 	'太古神王',
+	# 	'http://tieba.baidu.com/f?kw=%CC%AB%B9%C5%C9%F1%CD%F5',
+	# 	'<div class="threadlist_title[^>]*>\s*<i[^>]*></i>\s*<i[^>]*></i>\s*<a href="([^"]*)"[^>]*>\s*(.*?)\s*</a>\s*</div>'
+	# 	)
+	# taiGuShenWang.checkUpdate()
+
+	
+	# 这个网站在国内好像被墙了。
+	jianShen = UpdateMonitorBaseClass(email_send_list, 
+		'太古剑神', 
+		'http://www.piaotian.net/bookinfo/7/7820.html',
+		'<a href="(http://www.piaotian.net/html/7/7820/\d*.html)"[^>]*>([^<]*)</a>'
 		)
-	taiGuShenWang.checkUpdate()
+	jianShen.checkUpdate()
 
 
 	# 王垠的博客
