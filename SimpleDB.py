@@ -33,11 +33,12 @@ class SimpleDB:
 	def __init__(self):
 		self.cell_delimiter = '$_$'
 		self.row_delimiter = '\n'
+		self.filePrefix = '/home/NovelUpdate/'	# 绝对路径
 
 
 	def createTable(self, tableName, columns):
 		# 要用绝对路径，因为使用crontab运行时，若按照相对目录输出的话，你不知道在哪
-		self.tableName = os.getcwd() + os.sep + tableName.replace(os.sep, '_') + '.db_jacket'
+		self.tableName = self.filePrefix + tableName.replace(os.sep, '_') + '.db_jacket'
 		print('creating', self.tableName)
 		# 如果数据库文件不存在，则新建一个
 		if not os.path.exists(self.tableName):
