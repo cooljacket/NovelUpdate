@@ -9,7 +9,7 @@ from SendMailReliablly import SendMailReliablly
 
 class UpdateMonitorBaseClass:
 	"""抽象监测更新并发送邮件的逻辑，成为一个类，只需要简单传入参数即可塑造一个业务！"""
-	def __init__(self, email_send_list, name, url, pattern, tips='章', columns=['link_address']):
+	def __init__(self, email_send_list, name, url, pattern, coding='utf-8', tips='章', columns=['link_address']):
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
@@ -17,6 +17,7 @@ class UpdateMonitorBaseClass:
 		self.db.createTable(self.name, columns)
 		self.reliableEmailSender = SendMailReliablly(self.name + "_failed")
 		self.pattern = re.compile(pattern, re.I)
+		self.coding = coding
 		self.tips = tips
 
 
@@ -28,7 +29,7 @@ class UpdateMonitorBaseClass:
 		Returns: a list of update chapters' relative path and its title
 		such as [('http://dazhuzai.net.cn/dazhuzai-1309.html', 'title 1'), ]
 		"""
-		page = SinglePageSpider().getPage(self.url)
+		page = SinglePageSpider().getPage(self.url, self.coding)
 		result = re.findall(self.pattern, page)
 		if result:
 			return result
