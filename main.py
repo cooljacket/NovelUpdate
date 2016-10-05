@@ -2,10 +2,19 @@
 import sys
 from DaZhuZai import DaZhuZai
 from UpdateMonitorBaseClass import UpdateMonitorBaseClass
+from LiuDianBan import LiuDianBan
 
 
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
+
+	ldb = LiuDianBan(email_send_list,
+		'陈翔六点半',
+		'https://www.meipai.com/user/32821588?p=1',
+		'<a class="[^"]*" href="(/media/\d*)" itemprop="description">[^<]*<[^>]*>([^<]*)',
+		tips='个视频'
+		)
+	ldb.checkUpdate()
 
 	sdcs = UpdateMonitorBaseClass(email_send_list,
 		'学院官网',
