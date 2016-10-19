@@ -2,3 +2,4 @@
 *.pyc
 __pycache__/*
 *.db_jacket
+*.txt

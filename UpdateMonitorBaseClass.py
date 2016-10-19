@@ -9,7 +9,8 @@ from SendMailReliablly import SendMailReliablly
 
 class UpdateMonitorBaseClass:
 	"""抽象监测更新并发送邮件的逻辑，成为一个类，只需要简单传入参数即可塑造一个业务！"""
-	def __init__(self, email_send_list, name, url, pattern, coding='utf-8', tips='章', columns=['link_address']):
+	def __init__(self, email_send_list, name, url, pattern, 
+		coding='utf-8', tips='章', columns=['link_address'], url_prefix=None):
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
@@ -19,6 +20,7 @@ class UpdateMonitorBaseClass:
 		self.pattern = re.compile(pattern, re.I)
 		self.coding = coding
 		self.tips = tips
+		self.url_prefix = url_prefix
 
 
 	def getTargetContent(self):
@@ -32,6 +34,9 @@ class UpdateMonitorBaseClass:
 		page = SinglePageSpider().getPage(self.url, self.coding)
 		result = re.findall(self.pattern, page)
 		if result:
+			if self.url_prefix:
+				for i in range(len(result)):
+					result[i] = (self.url_prefix + result[i][0], result[i][1])
 			return result
 		else:
 			return None
@@ -54,7 +59,6 @@ class UpdateMonitorBaseClass:
 			result = self.db.find([tie])
 			if not result:
 				updateTies.append((tie, title))
-				print('update in {0}: {1}'.format(self.name, tie))
 				self.db.insert([tie])
 
 		to_whom_list, title, content = self.generate_noticification(updateTies)
