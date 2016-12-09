@@ -22,6 +22,8 @@ class UpdateMonitorBaseClass:
 		self.tips = tips
 		self.url_prefix = url_prefix
 
+		self.checkUpdate()
+
 
 	def getTargetContent(self):
 		"""获取指定页面的目标内容：

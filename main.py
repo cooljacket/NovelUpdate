@@ -6,6 +6,14 @@ from UpdateMonitorBaseClass import UpdateMonitorBaseClass
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
+	googleBlog = UpdateMonitorBaseClass(
+		email_send_list,
+		'Google blog',
+		'http://developers.googleblog.cn/',
+		"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
+		tips = '篇博客'
+		)
+
 	# 漫画：给我来个小和尚
 	xiaoHeShang = UpdateMonitorBaseClass(
 		email_send_list,
@@ -15,8 +23,6 @@ def main(args):
 		tips = '话漫画',
 		url_prefix = 'http://www.kuaikanmanhua.com'
 		)
-	xiaoHeShang.checkUpdate()
-
 
 	ldb = UpdateMonitorBaseClass(
 		email_send_list,
@@ -26,8 +32,6 @@ def main(args):
 		tips = '个视频',
 		url_prefix = 'https://www.meipai.com'
 		)
-	ldb.checkUpdate()
-
 
 	sdcs = UpdateMonitorBaseClass(
 		email_send_list,
@@ -36,8 +40,6 @@ def main(args):
 		'<a href="(http://sdcs.sysu.edu.cn/\?p=\d*)" title="([^"]*)"[^<]*</a>',
 		tips = '条通知'
 		)
-	sdcs.checkUpdate()
-
 
 	# 太古神王-百度贴吧
 	# 已经不看了
@@ -46,8 +48,6 @@ def main(args):
 	# 	'http://tieba.baidu.com/f?kw=%CC%AB%B9%C5%C9%F1%CD%F5',
 	# 	'<div class="threadlist_title[^>]*>\s*<i[^>]*></i>\s*<i[^>]*></i>\s*<a href="([^"]*)"[^>]*>\s*(.*?)\s*</a>\s*</div>'
 	# 	)
-	# taiGuShenWang.checkUpdate()
-
 	
 	# 这个网站在国内好像被墙了。
 	dazhuzai = UpdateMonitorBaseClass(
@@ -57,8 +57,6 @@ def main(args):
 		'<a href="(http://www.piaotian.net/html/4/4317/\d*.html)"[^>]*>([^<]*)</a>',
 		coding = 'gbk'
 		)
-	dazhuzai.checkUpdate()
-
 
 	# 王垠的博客
 	wyblog = UpdateMonitorBaseClass(
@@ -68,8 +66,6 @@ def main(args):
 		'<a href="(http://yinwang.org/blog-cn/[^"]*)">([^<]*)</a>',
 		tips = '篇博客'
 		)
-	wyblog.checkUpdate()
-
 
 	# 贺希荣老师的博客
 	xrBlog = UpdateMonitorBaseClass(
@@ -80,7 +76,7 @@ def main(args):
 		tips = '篇博客',
 		coding = 'gbk'
 		)
-	xrBlog.checkUpdate()
+
 
 	
 if __name__ == '__main__':
