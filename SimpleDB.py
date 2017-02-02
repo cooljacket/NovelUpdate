@@ -33,8 +33,9 @@ class SimpleDB:
 	def __init__(self):
 		self.cell_delimiter = '$_$'
 		self.row_delimiter = '\n'
-		self.filePrefix = '/home/NovelUpdate/'	# 绝对路径
-
+		self.filePrefix = '/home/jacket/NovelUpdate/data/'	# 绝对路径
+		if not os.path.exists(self.filePrefix):
+			os.mkdir(self.filePrefix)		
 
 	def createTable(self, tableName, columns):
 		# 要用绝对路径，因为使用crontab运行时，若按照相对目录输出的话，你不知道在哪
