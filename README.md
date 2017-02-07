@@ -15,6 +15,12 @@
 2. 修改send\_email模块使用自己申请的邮箱或搭建的邮件服务器，请不要用我申请的账号，因为一个免费账号每天发送邮件的频率和次数好像是有限制的，为了你好我也好^__^
 
 
+# 开发环境
+python3（注意只支持python3） + ubuntu 16.10 + Crontab
+
+其中Crontab是ubuntu上的一个定时任务机制，用来设置定时指定这个脚本的。用法很简单，请自行搜索。 1. 在shell中输入命令crontab -e（首次运行时需要选择编辑器，建议选自己熟悉的）； 2. 然后在里面输入* * * * * python3 /home/NovelUpdate/main.py >> /home/NovelUpdate/log.txt，保存即可。 注意上面的路径需要根据自己的实际来改，还有我把输出重定向导出为日志，如果不需要也可以去掉。 ps，上面的命令是每分钟都做一次，这样子日志很快就很大了！所以我还定制了每周一清空日志的任务： 0 0 * * 1 rm /home/NovelUpdate/log.txt
+
+
 # 程序逻辑
 一开始我写爬取百度小说贴吧的程序，没有模块化设计，全部逻辑写在一个类里，过了几个月回头看，太丑了，扩展性超级差。所以就按照MVC架构来思考模块化：
 ## Model
@@ -67,7 +73,16 @@
 这是主程序，在里面可自定义发送的邮箱列表、想要爬取的贴吧地址、执行多种不同的监测更新模块。
 
 ## SimpleDB.py
-这是我自己封装的一个简易数据库类，用了单例模式来实现（防止多处实例化，造成资源浪费或其它不良后果），底层其实是用了文件系统来做（效率低），目前支持的操作有:建表、插入、查找、获取整张表数据、删除整张表的数据的操作。
+这是我自己封装的一个简易数据库抽象类，抽象了这个爬虫对于数据处理的接口，目前支持的操作有:建表、插入、查找、获取整张表数据、删除整张表的数据的操作。
+
+
+# SimpleDBUsingSqlite3.py
+继承SimpleDB并实现其接口，使用sqlite3实现。
+
+
+# SimpleDBUsingFS.py
+继承SimpleDB并实现其接口，底层其实是用了文件系统来做（效率低）。
+
 
 ## SinglePageSpider.py
 这是对python3的urllib的请求操作的上层封装，很容易获取单个页面的内容。
@@ -94,10 +109,16 @@ sdcs.checkUpdate()
 ```
 
 
-## DaZhuZai.py
+## DaZhuZai.py（已去除）
 由于百度小说贴吧被查封，现在不再更新了，所以就找了另外一个专门的网站来做。当然，最好的办法还是：**支持正版**，到正版官网去看和订阅，自然会有很好的更新通知服务。
 
 由于我目前测试用的网站里面有一个推荐以往精彩章节的功能，所以经常会爬取到以前的章节，所以这个时候就需要继承基类UpdateMonitorBaseClass来重写getTargetContent函数就足够了！！！
+
+其实这里只是为了说明，只需要继承UpdateMonitorBaseClass并实现其getTargetContent接口就可以很好地自定义需要。
+
+但其实我后期已经扩展了UpdateMonitorBaseClass的功能，所以基本不需要自定义了，用好UpdateMonitorBaseClass的参数即可！！！
+
+
 ```python
 # -*- coding:utf-8 -*-
 import os
@@ -148,3 +169,14 @@ tie1000
 
 ## 2. 数据库更换
 其实python里内置了sqlite（效率应该可以比现在高挺多，可以用索引之类的来快速查找），哈哈，不过自己造轮子的感觉很爽！！！
+我将这个爬虫里对Model层的接口需求抽象出来了，然后分别用文件系统、sqlite3来实现这些接口，然后就随心所欲调用了，只需要将想使用的class传给UpdateMonitorBaseClass的构造函数即可！比如：
+```
+googleBlog = UpdateMonitorBaseClass(
+		email_send_list,
+		'Google blog',
+		'http://developers.googleblog.cn/',
+		"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
+		dbClass = SimpleDBUsingSqlite3,
+		tips = '篇博客'
+		)
+```
