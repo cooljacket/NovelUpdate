@@ -3,7 +3,7 @@ import re
 
 from send_email import send_email
 from SinglePageSpider import SinglePageSpider
-from SimpleDB import SimpleDB
+from SimpleDBUsingFS import SimpleDBUsingFS
 from SendMailReliablly import SendMailReliablly
 
 
@@ -14,9 +14,9 @@ class UpdateMonitorBaseClass:
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
-		self.db = SimpleDB()
+		self.db = SimpleDBUsingFS()
 		self.db.createTable(self.name, columns)
-		self.reliableEmailSender = SendMailReliablly(self.name + "_failed")
+		self.reliableEmailSender = SendMailReliablly(self.name)
 		self.pattern = re.compile(pattern, re.I)
 		self.coding = coding
 		self.tips = tips

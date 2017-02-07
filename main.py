@@ -6,23 +6,23 @@ from UpdateMonitorBaseClass import UpdateMonitorBaseClass
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
-	wanGuShenDi = UpdateMonitorBaseClass(
-		email_send_list,
-		'万古神帝',
-		'http://www.heiyange.com/book/4113/',
-		'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
-		tips = '章小说',
-		url_prefix = 'http://www.heiyange.com',
-		coding = 'gbk'
-		)
+	# wanGuShenDi = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'万古神帝',
+	# 	'http://www.heiyange.com/book/4113/',
+	# 	'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
+	# 	tips = '章小说',
+	# 	url_prefix = 'http://www.heiyange.com',
+	# 	coding = 'gbk'
+	# 	)
 
-	googleBlog = UpdateMonitorBaseClass(
-		email_send_list,
-		'Google blog',
-		'http://developers.googleblog.cn/',
-		"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
-		tips = '篇博客'
-		)
+	# googleBlog = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'Google blog',
+	# 	'http://developers.googleblog.cn/',
+	# 	"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
+	# 	tips = '篇博客'
+	# 	)
 
 	# 漫画：给我来个小和尚
 	xiaoHeShang = UpdateMonitorBaseClass(
@@ -34,14 +34,17 @@ def main(args):
 		url_prefix = 'http://www.kuaikanmanhua.com'
 		)
 
-	ldb = UpdateMonitorBaseClass(
-		email_send_list,
-		'《陈翔六点半》',
-		'https://www.meipai.com/user/32821588?p=1',
-		'<a class="[^"]*" href="(/media/\d*)" itemprop="description">[^<]*<[^>]*>([^<]*)',
-		tips = '个视频',
-		url_prefix = 'https://www.meipai.com'
-		)
+	return
+
+	# 不需要了，有公众号，更好的推送方式
+	# ldb = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'《陈翔六点半》',
+	# 	'https://www.meipai.com/user/32821588?p=1',
+	# 	'<a class="[^"]*" href="(/media/\d*)" itemprop="description">[^<]*<[^>]*>([^<]*)',
+	# 	tips = '个视频',
+	# 	url_prefix = 'https://www.meipai.com'
+	# 	)
 
 	sdcs = UpdateMonitorBaseClass(
 		email_send_list,
@@ -51,20 +54,14 @@ def main(args):
 		tips = '条通知'
 		)
 
-	# 太古神王-百度贴吧
-	# 已经不看了
-	# taiGuShenWang = UpdateMonitorBaseClass(email_send_list,
-	# 	'《太古神王》',
-	# 	'http://tieba.baidu.com/f?kw=%CC%AB%B9%C5%C9%F1%CD%F5',
-	# 	'<div class="threadlist_title[^>]*>\s*<i[^>]*></i>\s*<i[^>]*></i>\s*<a href="([^"]*)"[^>]*>\s*(.*?)\s*</a>\s*</div>'
-	# 	)
 	
-	# 这个网站在国内好像被墙了。
+	# 这个网站在国内好像被墙了，换成IP地址就好了……
 	dazhuzai = UpdateMonitorBaseClass(
-		email_send_list, 
+		email_send_list + ['853242365@qq.com'],
 		'《大主宰》', 
 		'http://198.211.60.226/bookinfo/4/4317.html',
-		'<a href="(http://www.piaotian.net/html/4/4317/\d*.html)"[^>]*>([^<]*)</a>',
+		'<a href="http://www.piaotian.net(/html/4/4317/\d*.html)"[^>]*>([^<]*)</a>',
+		url_prefix = 'http://198.211.60.226',
 		coding = 'gbk'
 		)
 

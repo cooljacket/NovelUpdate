@@ -1,13 +1,14 @@
 # -*- coding:utf-8 -*-
 from send_email import send_email
-from SimpleDB import SimpleDB
+from SimpleDBUsingFS import SimpleDBUsingFS
 
 
 class SendMailReliablly:
 	"""可靠邮件发送器，发送失败会自动保存进数据库里，下次激活时自动重发"""
 	def __init__(self, tableName):
-		self.db = SimpleDB()
-		self.db.createTable(tableName, ['to_whom_list', 'title', 'content'])
+		self.db = SimpleDBUsingFS()
+		# 为发送失败的邮件建立数据库
+		self.db.createTable(tableName + "_failed", ['to_whom_list', 'title', 'content'])
 		self.newlineReplacer = '$^&'
 
 
@@ -18,10 +19,13 @@ class SendMailReliablly:
 		3）收集这一次发送失败的邮件；
 		4）清空原来的“发送失败”数据库，把新的数据保存进去。
 		"""
-		emails_to_send = self.db.get_all()
+		emails_to_send = self.db.get_all()	# 以前发送失败的邮件
+
+		# 现在要发送的邮件，由于标题和内容可能存在换行符（\n）而FSDB用的是换行符来分隔，所以需要先转码一番！
 		if to_whom_list:
 			emails_to_send.append(self.row2str([to_whom_list, title, content]))
-		now_fail_emails = []
+
+		now_fail_emails = []	# 当前发送失败的邮件列表
 
 		for email in emails_to_send:
 			email = self.str2row(email)
