@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
 import sys
 from UpdateMonitorBaseClass import UpdateMonitorBaseClass
-from SimpleDBUsingFS import SimpleDBUsingFS
-# from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
+
 
 
 def main(args):
@@ -13,20 +12,20 @@ def main(args):
 		'万古神帝',
 		'http://www.heiyange.com/book/4113/',
 		'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
-		dbClass = SimpleDBUsingFS,
 		tips = '章小说',
 		url_prefix = 'http://www.heiyange.com',
 		coding = 'gbk'
 		)
-	return
+	# return
 
-	# googleBlog = UpdateMonitorBaseClass(
-	# 	email_send_list,
-	# 	'Google blog',
-	# 	'http://developers.googleblog.cn/',
-	# 	"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
-	# 	tips = '篇博客'
-	# 	)
+	googleBlog = UpdateMonitorBaseClass(
+		email_send_list,
+		'Google blog',
+		'http://developers.googleblog.cn/',
+		"<a href='(http://developers.googleblog.cn/[^']*)' itemprop='url' title='([^']*)'>[^<]*</a>",
+		tips = '篇博客'
+		)
+
 
 	# 漫画：给我来个小和尚
 	xiaoHeShang = UpdateMonitorBaseClass(
@@ -49,13 +48,14 @@ def main(args):
 	# 	url_prefix = 'https://www.meipai.com'
 	# 	)
 
-	sdcs = UpdateMonitorBaseClass(
-		email_send_list,
-		'《学院官网》',
-		'http://sdcs.sysu.edu.cn/',
-		'<a href="(http://sdcs.sysu.edu.cn/\?p=\d*)" title="([^"]*)"[^<]*</a>',
-		tips = '条通知'
-		)
+	# 使用了新网站，待更新正则表达式
+	# sdcs = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'《学院官网》',
+	# 	'http://sdcs.sysu.edu.cn/',
+	# 	'<a href="(http://sdcs.sysu.edu.cn/\?p=\d*)" title="([^"]*)"[^<]*</a>',
+	# 	tips = '条通知'
+	# 	)
 
 	
 	# 这个网站在国内好像被墙了，换成IP地址就好了……

@@ -7,8 +7,8 @@ class SendMailReliablly:
 	"""可靠邮件发送器，发送失败会自动保存进数据库里，下次激活时自动重发"""
 	def __init__(self, tableName, dbClass):
 		# 为发送失败的邮件建立数据库
-		self.db = dbClass(tableName + "_failed", ['to_whom_list', 'title', 'content'])
-		self.newlineReplacer = '$^&'
+		self.db = dbClass('./data/NovelUpdate_fail', tableName, ['to_whom_list', 'title', 'content'])
+		self.delimiter = '$^&'
 
 
 	def send(self, to_whom_list, title, content):
@@ -19,8 +19,12 @@ class SendMailReliablly:
 		4）清空原来的“发送失败”数据库，把新的数据保存进去。
 		"""
 		emails_to_send = self.db.get_all()	# 以前发送失败的邮件
-		if to_whom_list:
-			emails_to_send.append([to_whom_list, title, content])
+		if len(emails_to_send) > 0:
+			print('有{0}封发送失败的邮件'.format(len(emails_to_send)))
+		# 由于收件人是一个列表，对于数据库的一个字段，所以需要存入时先序列化为字符串，读取则反过来
+		for i in range(0, len(emails_to_send)):
+			emails_to_send[i][0] = emails_to_send[i][0].splite(self.delimiter)
+		emails_to_send.append([to_whom_list, title, content])
 		now_fail_emails = []	# 当前发送失败的邮件列表
 
 		for email in emails_to_send:
@@ -35,6 +39,8 @@ class SendMailReliablly:
 				now_fail_emails.append(email)
 
 		self.db.delete_all()
+		print("fail??? ", len(now_fail_emails))
 		for email in now_fail_emails:
+			email[0] = self.delimiter.join(email[0])
 			self.db.insert(email)
 		return len(now_fail_emails) == 0

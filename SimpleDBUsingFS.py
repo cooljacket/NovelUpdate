@@ -7,7 +7,7 @@ from SimpleDB import SimpleDB
 
 
 # 本程序默认将数据放在这里，因为要用crontab定时运行的话，最好用绝对路径来存放
-DATA_ABS_PATH = '/home/jacket/NovelUpdate/data/'
+DATA_ABS_PATH = '/home/jacket/NovelUpdate'
 
 
 class Cursor:
@@ -50,10 +50,10 @@ class Cursor:
 
 class SimpleDBUsingFS(SimpleDB):
 	"""使用fileSystem实现简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""
-	def __init__(self, tableName, columns):
+	def __init__(self, dbName, tableName, columns):
 		self.cell_delimiter = '$_$'		# 列之间的分隔符
 		self.row_delimiter = '^_^'		# 行之间的分隔符
-		self.filePrefix = DATA_ABS_PATH	# 绝对路径
+		self.filePrefix = '{0}/{1}/'.format(DATA_ABS_PATH, dbName)	# 绝对路径
 		if not os.path.exists(self.filePrefix):
 			os.mkdir(self.filePrefix)
 		self.createTable(tableName, columns)
@@ -73,15 +73,13 @@ class SimpleDBUsingFS(SimpleDB):
 			self.delete_all()
 
 
-	def insert(self, row, row_to_str=None):
+	def insert(self, row):
 		"""插入一行
 		row: 一个列表，长度要和建表时指定的一样；
 		row_to_str：可选，可以自己指定把插入的行转成字符串的函数
 		"""
 		with open(self.tableName, 'a') as db:
-			if row_to_str is None or not callable(row_to_str):
-				row_to_str = self.row_to_str
-			db.write(row_to_str(row))
+			db.write(self.row_to_str(row))
 
 
 	# 线性查找过去

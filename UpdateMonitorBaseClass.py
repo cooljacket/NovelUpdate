@@ -4,17 +4,18 @@ import re
 from send_email import send_email
 from SinglePageSpider import SinglePageSpider
 from SendMailReliablly import SendMailReliablly
+from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
 
 
 class UpdateMonitorBaseClass:
 	"""抽象监测更新并发送邮件的逻辑，成为一个类，只需要简单传入参数即可塑造一个业务！"""
-	def __init__(self, email_send_list, name, url, pattern, dbClass,
+	def __init__(self, email_send_list, name, url, pattern, dbClass=SimpleDBUsingSqlite3,
 		coding='utf-8', tips='章', columns=['link_address'], url_prefix=None):
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
 		self.dbClass = dbClass
-		self.db = self.dbClass(self.name, columns)
+		self.db = self.dbClass('./data/NovelUpdate_data', self.name, columns)
 		self.reliableEmailSender = SendMailReliablly(self.name, self.dbClass)
 		self.pattern = re.compile(pattern, re.I)
 		self.coding = coding
@@ -62,13 +63,16 @@ class UpdateMonitorBaseClass:
 				updateTies.append((tie, title))
 				self.db.insert([tie])
 
+		if len(updateTies) == 0:
+			return False
+		print('更新了{0}{1}'.format(len(updateTies), self.tips))
 		to_whom_list, title, content = self.generate_noticification(updateTies)
 		send_result = self.reliableEmailSender.send(to_whom_list, title, content)
 		if send_result:
 			print('发送邮件成功')
 		else:
 			print('发送邮件失败，待重发')	
-		return len(updateTies) > 0
+		return True
 
 
 
@@ -79,7 +83,6 @@ class UpdateMonitorBaseClass:
 			content = mail_title + "：\n"
 			for (url, title) in new_contents:
 				content += '{0}\n{1}\n\n'.format(title, url)
-			print('sending email...\n{0}'.format(content))
 			return [self.email_send_list, mail_title, content]
 		else:
 			return [None] * 3
