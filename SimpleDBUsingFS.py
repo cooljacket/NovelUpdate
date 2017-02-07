@@ -11,28 +11,37 @@ DATA_ABS_PATH = '/home/jacket/NovelUpdate/data/'
 
 
 class Cursor:
-	"""游标类，其实相当于数据库的迭代器"""
-	def __init__(self, tableName):
+	"""
+	游标类，其实相当于数据库的迭代器。
+	使其支持迭代器，方便写代码。
+	"""
+	def __init__(self, tableName, row_delimiter, cell_delimiter):
 		self.data = open(tableName)
-		self.last = ''
+		self.row_delimiter = row_delimiter
+		self.cell_delimiter = cell_delimiter
+		self.blockSize = 1024
+		self.last = self.data.read(self.blockSize)
+		# self.last = ''
 
-	def next(self, row_delimiter):
+	def __iter__(self):
+		return self
+
+	def __next__(self):
 		while True:
-			pos = self.last.find(row_delimiter)
+			pos = self.last.find(self.row_delimiter)
 			if pos == -1:
-				now = self.data.read(1024)
-				self.last += now
+				now = self.data.read(self.blockSize)
 				if len(now) == 0:
-					pos = len(self.last)
 					break
-				else:
-					self.last += now
+				self.last += now
 			else:
 				break
 
 		result = self.last[0:pos]
-		self.last = self.last[pos+len(row_delimiter):]
-		return result
+		self.last = self.last[pos + len(self.row_delimiter):]
+		if len(result) == 0:
+			raise StopIteration
+		return result.split(self.cell_delimiter)
 
 
 	def close(self):
@@ -82,10 +91,9 @@ class SimpleDBUsingFS(SimpleDB):
 
 		返回值：True表示查找到了，False表示找不到
 		"""
-		data = self.get_all()
 		result = False
-
-		for row in data:
+		cursor = Cursor(self.tableName, self.row_delimiter, self.cell_delimiter)
+		for row in cursor:
 			if len(values) == len(row):
 				match = True
 				for i in range(0, len(values)):
@@ -96,6 +104,7 @@ class SimpleDBUsingFS(SimpleDB):
 				if match:
 					result = True
 					break
+		cursor.close()
 		return result
 
 
@@ -119,14 +128,9 @@ class SimpleDBUsingFS(SimpleDB):
 
 	def get_all(self):
 		"""获取表里所有的行"""
-		cursor = Cursor(self.tableName)
+		cursor = Cursor(self.tableName, self.row_delimiter, self.cell_delimiter)
 		all = []
-		while True:
-			row = cursor.next(self.row_delimiter)
-			if len(row) == 0:
-				break
-			print(row)
-			all.append(row.split(self.cell_delimiter))
-			all[-1][-1] = all[-1][-1].strip()
+		for row in cursor:
+			all.append(row)
 		cursor.close()
 		return all

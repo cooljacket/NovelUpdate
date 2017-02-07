@@ -6,15 +6,16 @@ from UpdateMonitorBaseClass import UpdateMonitorBaseClass
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
-	# wanGuShenDi = UpdateMonitorBaseClass(
-	# 	email_send_list,
-	# 	'万古神帝',
-	# 	'http://www.heiyange.com/book/4113/',
-	# 	'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
-	# 	tips = '章小说',
-	# 	url_prefix = 'http://www.heiyange.com',
-	# 	coding = 'gbk'
-	# 	)
+	wanGuShenDi = UpdateMonitorBaseClass(
+		email_send_list,
+		'万古神帝',
+		'http://www.heiyange.com/book/4113/',
+		'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
+		tips = '章小说',
+		url_prefix = 'http://www.heiyange.com',
+		coding = 'gbk'
+		)
+	return
 
 	# googleBlog = UpdateMonitorBaseClass(
 	# 	email_send_list,
@@ -34,7 +35,6 @@ def main(args):
 		url_prefix = 'http://www.kuaikanmanhua.com'
 		)
 
-	return
 
 	# 不需要了，有公众号，更好的推送方式
 	# ldb = UpdateMonitorBaseClass(
