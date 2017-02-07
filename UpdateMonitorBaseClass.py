@@ -3,20 +3,19 @@ import re
 
 from send_email import send_email
 from SinglePageSpider import SinglePageSpider
-from SimpleDBUsingFS import SimpleDBUsingFS
 from SendMailReliablly import SendMailReliablly
 
 
 class UpdateMonitorBaseClass:
 	"""抽象监测更新并发送邮件的逻辑，成为一个类，只需要简单传入参数即可塑造一个业务！"""
-	def __init__(self, email_send_list, name, url, pattern, 
+	def __init__(self, email_send_list, name, url, pattern, dbClass,
 		coding='utf-8', tips='章', columns=['link_address'], url_prefix=None):
 		self.email_send_list = email_send_list
 		self.name = name
 		self.url = url
-		self.db = SimpleDBUsingFS()
-		self.db.createTable(self.name, columns)
-		self.reliableEmailSender = SendMailReliablly(self.name)
+		self.dbClass = dbClass
+		self.db = self.dbClass(self.name, columns)
+		self.reliableEmailSender = SendMailReliablly(self.name, self.dbClass)
 		self.pattern = re.compile(pattern, re.I)
 		self.coding = coding
 		self.tips = tips

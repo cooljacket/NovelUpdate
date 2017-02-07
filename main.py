@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 import sys
 from UpdateMonitorBaseClass import UpdateMonitorBaseClass
+from SimpleDBUsingFS import SimpleDBUsingFS
+# from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
 
 
 def main(args):
@@ -11,6 +13,7 @@ def main(args):
 		'万古神帝',
 		'http://www.heiyange.com/book/4113/',
 		'<a href="(/book/4113/\d+.html)">([^<]*)</a>',
+		dbClass = SimpleDBUsingFS,
 		tips = '章小说',
 		url_prefix = 'http://www.heiyange.com',
 		coding = 'gbk'

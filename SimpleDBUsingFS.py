@@ -49,13 +49,14 @@ class Cursor:
 
 
 class SimpleDBUsingFS(SimpleDB):
-	"""简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""
-	def __init__(self):
+	"""使用fileSystem实现简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""
+	def __init__(self, tableName, columns):
 		self.cell_delimiter = '$_$'		# 列之间的分隔符
 		self.row_delimiter = '^_^'		# 行之间的分隔符
 		self.filePrefix = DATA_ABS_PATH	# 绝对路径
 		if not os.path.exists(self.filePrefix):
-			os.mkdir(self.filePrefix)		
+			os.mkdir(self.filePrefix)
+		self.createTable(tableName, columns)
 
 
 	def createTable(self, tableName, columns):

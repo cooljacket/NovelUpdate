@@ -1,14 +1,13 @@
 # -*- coding:utf-8 -*-
 from send_email import send_email
-from SimpleDBUsingFS import SimpleDBUsingFS
+# from SimpleDBUsingFS import SimpleDBUsingFS
 
 
 class SendMailReliablly:
 	"""可靠邮件发送器，发送失败会自动保存进数据库里，下次激活时自动重发"""
-	def __init__(self, tableName):
-		self.db = SimpleDBUsingFS()
+	def __init__(self, tableName, dbClass):
 		# 为发送失败的邮件建立数据库
-		self.db.createTable(tableName + "_failed", ['to_whom_list', 'title', 'content'])
+		self.db = dbClass(tableName + "_failed", ['to_whom_list', 'title', 'content'])
 		self.newlineReplacer = '$^&'
 
 
