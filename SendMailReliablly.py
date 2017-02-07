@@ -20,15 +20,11 @@ class SendMailReliablly:
 		4）清空原来的“发送失败”数据库，把新的数据保存进去。
 		"""
 		emails_to_send = self.db.get_all()	# 以前发送失败的邮件
-
-		# 现在要发送的邮件，由于标题和内容可能存在换行符（\n）而FSDB用的是换行符来分隔，所以需要先转码一番！
 		if to_whom_list:
-			emails_to_send.append(self.row2str([to_whom_list, title, content]))
-
+			emails_to_send.append([to_whom_list, title, content])
 		now_fail_emails = []	# 当前发送失败的邮件列表
 
 		for email in emails_to_send:
-			email = self.str2row(email)
 			try:
 				result = send_email(email[0], email[1], email[2])
 			except Exception as e:
@@ -41,22 +37,5 @@ class SendMailReliablly:
 
 		self.db.delete_all()
 		for email in now_fail_emails:
-			email = self.row2str(email)
 			self.db.insert(email)
 		return len(now_fail_emails) == 0
-
-
-	def row2str(self, row):
-		"""把发送列表（第0维）转为字符串，把换行符替换为自己的分隔符"""
-		row[0] = ','.join(row[0])
-		row[1] = row[1].replace('\n', self.newlineReplacer)
-		row[2] = row[2].replace('\n', self.newlineReplacer)
-		return row
-
-
-	def str2row(self, row_str):
-		"""把发送列表的字符串形式分割回来，把自己的分隔符恢复为原来的换行符"""
-		row_str[0] = row_str[0].split(',')
-		row_str[1] = row_str[1].replace(self.newlineReplacer, '\n')
-		row_str[2] = row_str[2].replace(self.newlineReplacer, '\n')
-		return row_str
