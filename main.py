@@ -16,7 +16,6 @@ def main(args):
 		url_prefix = 'http://www.heiyange.com',
 		coding = 'gbk'
 		)
-	# return
 
 	googleBlog = UpdateMonitorBaseClass(
 		email_send_list,
