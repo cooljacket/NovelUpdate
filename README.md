@@ -44,6 +44,7 @@ python3（注意只支持python3） + ubuntu 16.10 + Crontab
 
 ## View
 这里其实是：
+
 1. 根据更新内容（来自Model层），生成邮件内容；
 2. 可靠发送邮件。
 
