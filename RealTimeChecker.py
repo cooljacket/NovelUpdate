@@ -8,6 +8,16 @@ from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
+	sdcs = UpdateMonitorBaseClass(
+		email_send_list,
+		'《学院官网》',
+		'http://sdcs.sysu.edu.cn/',
+		'<a href="(/node/\d+)">([^"]*)</a>',
+		tips = '条通知',
+		url_prefix = 'http://sdcs.sysu.edu.cn',
+		)
+
+
 	wanGuShenDi = UpdateMonitorBaseClass(
 		email_send_list,
 		'万古神帝',
@@ -40,17 +50,6 @@ def main(args):
 		tips = '话漫画',
 		url_prefix = 'http://www.kuaikanmanhua.com'
 		)
-
-
-	# 使用了新网站，待更新正则表达式
-	# sdcs = UpdateMonitorBaseClass(
-	# 	email_send_list,
-	# 	'《学院官网》',
-	# 	'http://sdcs.sysu.edu.cn/',
-	# 	'<a href="(http://sdcs.sysu.edu.cn/\?p=\d*)" title="([^"]*)"[^<]*</a>',
-	# 	tips = '条通知'
-	# 	)
-
 
 	
 if __name__ == '__main__':
