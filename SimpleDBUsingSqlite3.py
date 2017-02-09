@@ -12,6 +12,7 @@ class SimpleDBUsingSqlite3(SimpleDB):
 	"""使用sqlite3实现简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""	
 	def __init__(self, dbName, tableName, columns):
 		self.db_name = dbName.replace(' ', '_')
+		print('PATH lala: ', self.db_name)
 		self.conn = sqlite3.connect(self.db_name)
 		self.createTable(tableName, columns)
 

@@ -6,10 +6,6 @@ import os
 from SimpleDB import SimpleDB
 
 
-# 本程序默认将数据放在这里，因为要用crontab定时运行的话，最好用绝对路径来存放
-DATA_ABS_PATH = '/home/jacket/NovelUpdate'
-
-
 class Cursor:
 	"""
 	游标类，其实相当于数据库的迭代器。
@@ -50,10 +46,10 @@ class Cursor:
 
 class SimpleDBUsingFS(SimpleDB):
 	"""使用fileSystem实现简易数据库类，支持建表、插入、查询、获取整张表、删除整张表的操作"""
-	def __init__(self, dbName, tableName, columns):
+	def __init__(self, dbLocation, tableName, columns):
 		self.cell_delimiter = '$_$'		# 列之间的分隔符
 		self.row_delimiter = '^_^'		# 行之间的分隔符
-		self.filePrefix = '{0}/{1}/'.format(DATA_ABS_PATH, dbName)	# 绝对路径
+		self.filePrefix = dbLocation	# 绝对路径
 		if not os.path.exists(self.filePrefix):
 			os.mkdir(self.filePrefix)
 		self.createTable(tableName, columns)

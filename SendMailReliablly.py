@@ -5,9 +5,9 @@ from send_email import send_email
 
 class SendMailReliablly:
 	"""可靠邮件发送器，发送失败会自动保存进数据库里，下次激活时自动重发"""
-	def __init__(self, tableName, dbClass):
+	def __init__(self, dbLocation, tableName, dbClass):
 		# 为发送失败的邮件建立数据库
-		self.db = dbClass('./data/NovelUpdate_fail', tableName, ['to_whom_list', 'title', 'content'])
+		self.db = dbClass(dbLocation, tableName, ['to_whom_list', 'title', 'content'])
 		self.delimiter = '$^&'
 
 

@@ -5,6 +5,7 @@ from send_email import send_email
 from SinglePageSpider import SinglePageSpider
 from SendMailReliablly import SendMailReliablly
 from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
+from config import *
 
 
 class UpdateMonitorBaseClass:
@@ -15,8 +16,8 @@ class UpdateMonitorBaseClass:
 		self.name = name
 		self.url = url
 		self.dbClass = dbClass
-		self.db = self.dbClass('./data/NovelUpdate_data', self.name, columns)
-		self.reliableEmailSender = SendMailReliablly(self.name, self.dbClass)
+		self.db = self.dbClass(DATA_ABS_PATH + '/NovelUpdate_data', self.name, columns)
+		self.reliableEmailSender = SendMailReliablly(DATA_ABS_PATH + '/NovelUpdate_fail', self.name, self.dbClass)
 		self.pattern = re.compile(pattern, re.I)
 		self.coding = coding
 		self.tips = tips
