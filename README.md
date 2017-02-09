@@ -22,7 +22,20 @@ python3（注意只支持python3） + ubuntu 16.10 + Crontab
 
 1. 在shell中输入命令crontab -e（首次运行时需要选择编辑器，建议选自己熟悉的，比如vim）； 
 2. 然后在里面输入`* * * * * python3 /home/jacket/NovelUpdate/main.py >> /home/jacket/NovelUpdate/data/log.txt`，保存即可。 注意上面的路径需要根据自己的实际来改，还有我把输出重定向导出为日志，如果不需要也可以去掉。
-3. ps，上面的命令是每分钟都做一次，这样子日志很快就很大了！所以我还定制了每周一清空日志的任务： 0 0 * * 1 rm /home/jacket/NovelUpdate/data/log.txt
+3. ps，上面的命令是每分钟都做一次，这样子日志很快就很大了！所以我还定制了每天的日志清除任务
+
+值得注意的是，随着检测更新的任务的增多，我发现有些是需要实时的（比如喜欢看的小说、必须看的通知），而有些的实时性要求很低（比如一些技术博客），所以我在crontab中区分了这两种任务，最后的话，我的crontab脚本这样写：
+
+```
+# 每分钟都检测一遍“实时的检测任务”
+* * * * * python3 /home/jacket/NovelUpdate/RealTimeChecker.py >> /home/jacket/NovelUpdate/data/RealTimeLog.txt
+
+# 每隔十分钟才检测一遍“非实时的检测任务”
+0,10,20,30,40,50 * * * * python3 /home/jacket/NovelUpdate/NotRealTimeChecker.py >> /home/jacket/NovelUpdate/data/NotRealTimeLog.txt
+
+# 每天的中午12点清除log文件
+* 12 * * * rm /home/jacket/NovelUpdate/data/RealTimeLog.txt /home/jacket/NovelUpdate/data/NotRealTimeLog.txt
+```
 
 
 # 程序逻辑
