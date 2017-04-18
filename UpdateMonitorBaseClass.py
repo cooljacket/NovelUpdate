@@ -34,14 +34,17 @@ class UpdateMonitorBaseClass:
 		Returns: a list of update chapters' relative path and its title
 		such as [('http://dazhuzai.net.cn/dazhuzai-1309.html', 'title 1'), ]
 		"""
-		page = SinglePageSpider().getPage(self.url, self.coding)
-		result = re.findall(self.pattern, page)
-		if result:
-			if self.url_prefix:
-				for i in range(len(result)):
-					result[i] = (self.url_prefix + result[i][0], result[i][1])
-			return result
-		else:
+		try:
+			page = SinglePageSpider().getPage(self.url, self.coding)
+			result = re.findall(self.pattern, page)
+			if result:
+				if self.url_prefix:
+					for i in range(len(result)):
+						result[i] = (self.url_prefix + result[i][0], result[i][1])
+				return result
+			else:
+				return None
+		except:
 			return None
 
 
