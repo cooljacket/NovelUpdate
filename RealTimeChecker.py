@@ -8,43 +8,54 @@ from SimpleDBUsingSqlite3 import SimpleDBUsingSqlite3
 def main(args):
 	email_send_list = ['happyjacket@qq.com']
 
-	bigBang = UpdateMonitorBaseClass(
+	xiuLuoWuShen = UpdateMonitorBaseClass(
 		email_send_list,
-		'生活大爆炸',
-		'http://www.meijuworld.com/11838.html',
-		'<a href="https://pan.baidu.com/s/([^"]+)" target="_blank">([^<]+)</a>',
-		tips = '集',
-		url_prefix = 'https://pan.baidu.com/s/',
-		dbClass = SimpleDBUsingFS
+		'修罗武神',
+		'http://www.17k.com/book/493239.html',
+		'<a href="http://www.17k.com/(chapter/493239/\d+.html)" target="_blank">([^<]*)</a>',
+		dbClass=SimpleDBUsingSqlite3,
+		tips = '章小说',
+		url_prefix = 'http://www.17k.com/'
 		)
+
+
+	# bigBang = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'生活大爆炸',
+	# 	'http://www.meijuworld.com/11838.html',
+	# 	'<a href="https://pan.baidu.com/s/([^"]+)" target="_blank">([^<]+)</a>',
+	# 	tips = '集',
+	# 	url_prefix = 'https://pan.baidu.com/s/',
+	# 	dbClass = SimpleDBUsingFS
+	# 	)
 
 	sdcs = UpdateMonitorBaseClass(
 		email_send_list,
 		'《学院官网》',
-		'http://sdcs.sysu.edu.cn/',
-		'<a href="/(node/\d+)">([^"]*)</a>',
+		'http://sdcs.sysu.edu.cn',
+		'<a href="/(content/\d+)"[^>]*>([^"]*)</a>',
 		tips = '条通知',
 		url_prefix = 'http://sdcs.sysu.edu.cn/',
 		)
 
 
-	wanGuShenDi = UpdateMonitorBaseClass(
-		email_send_list,
-		'万古神帝',
-		'http://www.heiyange.com/book/4113/',
-		'<a href="/(book/4113/\d+.html)">([^<]*)</a>',
-		dbClass=SimpleDBUsingSqlite3,
-		tips = '章小说',
-		url_prefix = 'http://www.heiyange.com/',
-		coding = 'gbk'
-		)
+	# wanGuShenDi = UpdateMonitorBaseClass(
+	# 	email_send_list,
+	# 	'万古神帝',
+	# 	'http://www.heiyange.com/book/4113/',
+	# 	'<a href="/(book/4113/\d+.html)">([^<]*)</a>',
+	# 	dbClass=SimpleDBUsingSqlite3,
+	# 	tips = '章小说',
+	# 	url_prefix = 'http://www.heiyange.com/',
+	# 	coding = 'gbk'
+	# 	)
 
 
 	# 这个网站在国内好像被墙了，换成IP地址就好了……
 	#email_send_list + ['853242365@qq.com'],
 	dzz_url = '107.151.164.90'
 	dazhuzai = UpdateMonitorBaseClass(
-		email_send_list + ['853242365@qq.com'],
+		['853242365@qq.com'],
 		'《大主宰》', 
 		'http://{0}/html/4/4317/index.html'.format(dzz_url),
 		'<a href="(\d+.html)">([^<]*)</a>',
